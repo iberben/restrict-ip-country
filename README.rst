@@ -1,7 +1,7 @@
 Restrict IPs & Countries 
 ------------------------
 
-``restrict-ip-country`` is a reusable Django app for restricting ip addresses and country areas from accessing site.
+`restrict-ip-country` is a reusable Django app for restricting ip addresses and country areas from accessing site.
 
 Requirements
 ------------
@@ -39,7 +39,7 @@ and run the ``setup.py`` installation script::
 Configuring GeoIP2 settings
 ===========================
 
-Ensure you have setup .. __GeoIP2: https://docs.djangoproject.com/en/3.2/ref/contrib/gis/geoip2/
+Ensure you setup `GeoIP2`, read more here: https://docs.djangoproject.com/en/3.2/ref/contrib/gis/geoip2/
 global variables in your ``settings.py``::
 
     GEOIP_PATH=os.path.join(BASE_DIR, 'data')
@@ -49,7 +49,8 @@ This setting is required.
 
     GEOIP_CITY='GeoLite2-City.mmdb'
 
-The basename to use for the GeoIP city data file. Defaults to `GeoLite2-City.mmdb <https://git.io/GeoLite2-City.mmdb>`_.
+The basename to use for the GeoIP city data file. Defaults to `GeoLite2-City.mmdb`, 
+download here: https://git.io/GeoLite2-City.mmdb.
 
 
 =====
