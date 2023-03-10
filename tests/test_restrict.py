@@ -117,6 +117,35 @@ class RestrictIpCountryMiddlewareTests(TestCase):
 
                 GeoIP2_patch.assert_called_once()
 
+    def test_context_data_render_in_template_when_restricted(self):
+        with patch.object(restrict_ip_country.middleware, 'GeoIP2') as GeoIP2_patch:
+            with patch.object(restrict_ip_country.middleware, 'render_to_string') as render_to_string_patch:
+                with patch.object(restrict_ip_country.middleware, 'import_string') as import_string_patch:
+                    get_response = MagicMock()
+                    
+                    self.block_ip_address()
+
+                    self.assertEqual(RestrictIp.objects.count(), 1)
+                    self.assertEqual(RestrictCountry.objects.count(), 0)
+
+                    middleware = RestrictIpCountryMiddleware(get_response)
+                    
+                    middleware.get_info = MagicMock()
+
+                    render_to_string_patch.return_value = lambda x, d: f'<html>{d["title"]}</html>'
+
+                    import_string_patch.return_value = lambda: {'title': 'Hello World'}
+
+                    middleware.process_request(self.set_request_ip_address())
+                    
+                    render_to_string_patch.assert_called_once_with('errors/403.html', {'title': 'Hello World'})
+
+                    self.assertTrue(type(render_to_string_patch.call_args[1]) is dict)
+
+                    import_string_patch.assert_called_once()
+
+                    GeoIP2_patch.assert_called_once()
+
     def test_throws_template_error_when_not_found(self):
         with patch.object(restrict_ip_country.middleware, 'GeoIP2') as GeoIP2_patch:
             get_response = MagicMock()
@@ -134,7 +163,10 @@ class RestrictIpCountryMiddlewareTests(TestCase):
 
             self.assertRaises(TemplateDoesNotExist, func)
 
+            GeoIP2_patch.assert_called_once()
+
     def test_with_commands_no_throw(self):
-        call_command('get_ip_info', ip="127.0.0.1", verbosity='0')
-        call_command('get_ip_info', ip="127.0.0.1", verbosity='0')
+        with patch.object(restrict_ip_country.middleware, 'GeoIP2') as GeoIP2_patch:
+            call_command('get_ip_info', ip="127.0.0.1", verbosity='0')
+            call_command('get_ip_info', ip="127.0.0.1", verbosity='0')
 
