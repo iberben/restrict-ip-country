@@ -39,7 +39,7 @@ and run the ``setup.py`` installation script::
 Configuring GeoIP2 settings
 ===========================
 
-Ensure you have setup `GeoIP2 <https://docs.djangoproject.com/en/3.2/ref/contrib/gis/geoip2/>`_ 
+Ensure you have setup [GeoIP2](https://docs.djangoproject.com/en/3.2/ref/contrib/gis/geoip2/) 
 global variables in your ``settings.py``::
 
     GEOIP_PATH=os.path.join(BASE_DIR, 'data')
@@ -49,7 +49,7 @@ This setting is required.
 
     GEOIP_CITY='GeoLite2-City.mmdb'
 
-The basename to use for the GeoIP city data file. Defaults to `'GeoLite2-City.mmdb' <https://git.io/GeoLite2-City.mmdb>`.
+The basename to use for the GeoIP city data file. Defaults to [GeoLite2-City.mmdb](https://git.io/GeoLite2-City.mmdb).
 
 
 =====
