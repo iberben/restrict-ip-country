@@ -91,6 +91,8 @@ Using RESTRICT_IP_TEMPLATE_PATH
 * The path where the template to be rendered is located when access is restricted to site,
 defaults to ``errors/403.html``.
 
+    RESTRICT_IP_TEMPLATE_PATH = "errors/403.html"
+
 * Note: if template is not available or found. ``TemplateDoesNotExist`` exception is thrown.
 
 
@@ -111,9 +113,22 @@ Using RESTRICT_IP_CACHE_TIMEOUT
 The time in seconds to cache the database restricted values, 
 to minimize un-necessary calls per request especially in times of high traffic::
 
-    RESTRICT_IP_TEMPLATE_CONTEXT_BACKEND = "your.actual.ContextBackend"
+    RESTRICT_IP_CACHE_TIMEOUT = 300
 
 Defaults to ``300`` seconds. And ``0`` to not cache at all.
+
+
+Using RESTRICT_IP_BLOCK_NOTFOUND
+--------------------------------
+
+Block any parsed ip address not found in the ``GEOIP_CITY`` database.
+
+    RESTRICT_IP_BLOCK_NOTFOUND = False
+
+Defaults to ``False``.
+
+Note: you must have at least a restricted ip or country set in your database for it to work. 
+This is for optimization purposes.
 
 
 Command Extensions
