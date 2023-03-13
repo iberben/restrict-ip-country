@@ -2,6 +2,7 @@ import logging
 
 from restrict_ip_country.constants import (
     RESTRICT_IP_CACHE_KEY, 
+    RESTRICT_IP_BLOCK_NOTFOUND,
     RESTRICT_IP_CACHE_TIMEOUT,
     RESTRICT_IP_TEMPLATE_PATH,
     RESTRICT_IP_TEMPLATE_CONTEXT_BACKEND
@@ -42,18 +43,21 @@ class RestrictIpCountryMiddleware(object):
         return response
 
     def __get_client_ip(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', None)
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0].strip()
         else:
-            ip = request.META.get('REMOTE_ADDR')
+            ip = request.META.get('REMOTE_ADDR', None)
         return ip
 
     def get_info(self, ip):
         try:
             iso_code = self.__geoip.city(ip)['country_code']
         except:
-            iso_code = "##"
+            if RESTRICT_IP_BLOCK_NOTFOUND:
+                iso_code = None
+            else:
+                iso_code = "##"
             logger.warning(f'IP address {ip} was not found in database')
         
         return iso_code
@@ -88,7 +92,9 @@ class RestrictIpCountryMiddleware(object):
         if self.__ipsDeny or self.__isoCodeDeny:
             iso_code = self.get_info(ip)                
 
-            if ip in self.__ipsDeny or iso_code in self.__isoCodeDeny:
+            if (iso_code is None or 
+                ip in self.__ipsDeny or  
+                iso_code in self.__isoCodeDeny):
                 logger.debug('Unauthorized access, IP address was ' + ip)
                 
                 context = {}
