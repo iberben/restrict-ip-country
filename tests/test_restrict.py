@@ -117,6 +117,50 @@ class RestrictIpCountryMiddlewareTests(TestCase):
 
                 GeoIP2_patch.assert_called_once()
 
+    def test_with_ip_not_found(self):
+        with patch.object(restrict_ip_country.middleware, 'GeoIP2') as GeoIP2_patch:
+            with patch.object(restrict_ip_country.middleware, 'render_to_string') as render_to_string_patch:
+                get_response = MagicMock()
+                
+                self.block_ip_address()
+
+                self.assertEqual(RestrictIp.objects.count(), 1)
+                self.assertEqual(RestrictCountry.objects.count(), 0)
+
+                middleware = RestrictIpCountryMiddleware(get_response)
+                
+                middleware.get_info = MagicMock()
+                middleware.get_info.return_value = None
+
+                middleware.process_request(self.set_request_ip_address('196.122.133.8'))
+
+                self.assertEqual(middleware.get_info.call_count, 1)
+                render_to_string_patch.assert_called_once()
+
+                GeoIP2_patch.assert_called_once()
+
+    def test_with_ip_found(self):
+        with patch.object(restrict_ip_country.middleware, 'GeoIP2') as GeoIP2_patch:
+            with patch.object(restrict_ip_country.middleware, 'render_to_string') as render_to_string_patch:
+                get_response = MagicMock()
+                
+                self.block_ip_address()
+
+                self.assertEqual(RestrictIp.objects.count(), 1)
+                self.assertEqual(RestrictCountry.objects.count(), 0)
+
+                middleware = RestrictIpCountryMiddleware(get_response)
+                
+                middleware.get_info = MagicMock()
+                middleware.get_info.return_value = "##"
+
+                middleware.process_request(self.set_request_ip_address('196.122.133.8'))
+
+                self.assertEqual(middleware.get_info.call_count, 1)
+                render_to_string_patch.assert_not_called()
+
+                GeoIP2_patch.assert_called_once()
+
     def test_context_data_render_in_template_when_restricted(self):
         with patch.object(restrict_ip_country.middleware, 'GeoIP2') as GeoIP2_patch:
             with patch.object(restrict_ip_country.middleware, 'render_to_string') as render_to_string_patch:
