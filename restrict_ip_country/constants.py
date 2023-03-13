@@ -3,6 +3,8 @@ from django.conf import settings
 
 RESTRICT_IP_CACHE_KEY = '#RESTRICT#_#_{}'
 
+RESTRICT_IP_BLOCK_NOTFOUND = getattr(settings, 'RESTRICT_IP_BLOCK_NOTFOUND', False)
+
 RESTRICT_IP_CACHE_TIMEOUT = getattr(settings, 'RESTRICT_IP_CACHE_TIMEOUT', 300) # in seconds
 
 RESTRICT_IP_TEMPLATE_PATH = getattr(settings, 'RESTRICT_IP_TEMPLATE_PATH', None)
