@@ -13,7 +13,7 @@ class RestrictIp(TimeStampMixin):
 
         ordering = ("-created_at",)
         
-        db_table = "restrict_ip"
+        # db_table = "restrict_ip"
 
     def __unicode__(self):
         return str(self)
@@ -34,7 +34,7 @@ class RestrictCountry(TimeStampMixin):
 
         ordering = ("-created_at",)
         
-        db_table = "restrict_country"
+        # db_table = "restrict_country"
 
     def __unicode__(self):
         return str(self)
