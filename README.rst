@@ -1,4 +1,4 @@
-Restrict IPs & Countries 
+Restrict IPs & Countries
 ------------------------
 
 `restrict-ip-country` is a reusable Django app for restricting ip addresses and country areas from accessing site.
@@ -44,12 +44,12 @@ global variables in your ``settings.py``::
 
     GEOIP_PATH=os.path.join(BASE_DIR, 'data')
 
-A string or pathlib.Path specifying the directory where the GeoIP data files are located. 
+A string or pathlib.Path specifying the directory where the GeoIP data files are located.
 This setting is required.
 
     GEOIP_CITY='GeoLite2-City.mmdb'
 
-The basename to use for the GeoIP city data file. Defaults to `GeoLite2-City.mmdb`, 
+The basename to use for the GeoIP city data file. Defaults to `GeoLite2-City.mmdb`,
 download here: https://git.io/GeoLite2-City.mmdb.
 
 
@@ -66,13 +66,13 @@ Configuring your project
 
 In your Django project's settings module, add restrict_ip_country to your
 ``INSTALLED_APPS`` setting::
-    
+
     INSTALLED_APPS = (
         ...
         'restrict_ip_country',
     )
 
-Finally, add ``restrict_ip_country.middleware.RestrictIpMiddleware`` to your ``MIDDLEWARE`` in your ``settings.py``, 
+Finally, add ``restrict_ip_country.middleware.RestrictIpCountryMiddleware`` to your ``MIDDLEWARE`` in your ``settings.py``,
 ensure all configurations are properly done to avoid errors.
 
 
@@ -81,7 +81,7 @@ Settings
 ========
 
 Following is a list of settings which can be added to your Django settings
-configuration. The ``RESTRICT_IP_TEMPLATE_PATH`` is required and other settings 
+configuration. The ``RESTRICT_IP_TEMPLATE_PATH`` is required and other settings
 are optional and the default value is listed for each.
 
 
@@ -99,7 +99,7 @@ defaults to ``errors/403.html``.
 Using RESTRICT_IP_TEMPLATE_CONTEXT_BACKEND
 ------------------------------------------
 
-A function when called in your app returns a dictionary, the 
+A function when called in your app returns a dictionary, the
 context data used in rendering the restricted template::
 
     RESTRICT_IP_TEMPLATE_CONTEXT_BACKEND = "your.actual.ContextBackend"
@@ -110,7 +110,7 @@ Defaults to ``None``.
 Using RESTRICT_IP_CACHE_TIMEOUT
 -------------------------------
 
-The time in seconds to cache the database restricted values, 
+The time in seconds to cache the database restricted values,
 to minimize un-necessary calls per request especially in times of high traffic::
 
     RESTRICT_IP_CACHE_TIMEOUT = 300
@@ -127,7 +127,7 @@ Block any parsed ip address not found in the ``GEOIP_CITY`` database.
 
 Defaults to ``False``.
 
-Note: you must have at least a restricted ip or country set in your database for it to work. 
+Note: you must have at least a restricted ip or country set in your database for it to work.
 This is for optimization purposes.
 
 
@@ -140,7 +140,7 @@ With restrict_ip_country in your ``INSTALLED_APPS``, there will be 2 new
 * ``get_ip_info`` will get the city information of the given ip address.
   Use the ``-p``or ``--ip`` option to set the ip address.
 
-* ``get_restrict_config`` will get the restrict-ip-country configs including 
+* ``get_restrict_config`` will get the restrict-ip-country configs including
   the restricted ip addresses and countries.
 
 
